@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.21 38.8">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-dasharray: 0 0 4.85 3.88;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-3 {
+        fill: #fff;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="_图层_1-2" data-name="图层 1">
+    <g>
+      <path class="cls-2" d="m.45,38.59s.4-.84,1.14-2.22"/>
+      <path class="cls-1" d="m3.48,32.98c4.71-8.08,14.27-21.98,24.05-21.31,10.93.75,16.51,4,24.21-3.52"/>
+      <path class="cls-2" d="m53.08,6.74c.53-.58,1.07-1.22,1.62-1.91"/>
+      <polygon class="cls-3" points="55.98 9.26 53.93 5.8 50.02 4.87 58.21 0 55.98 9.26"/>
+    </g>
+  </g>
+</svg>

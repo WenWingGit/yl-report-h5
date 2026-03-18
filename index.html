@@ -1,0 +1,41 @@
+<!doctype html>
+<html build-time="%BUILD_TIME%" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta property="og:title" content="易联账单 - 在线支付" />
+    <meta property="og:description" content="您的账单已生成，可以直接在线支付" />
+    <meta property="og:image" content="https://sys.yilianqc.com/payment/images/AppLogo.png" />
+    <meta property="og:url" content="https://sys.yilianqc.com/payment/index.html" />
+    <meta property="og:type" content="website" />
+    <meta
+      name="viewport"
+      content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0"
+    />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <!-- <script>
+    var coverSupport =
+      'CSS' in window &&
+      typeof CSS.supports === 'function' &&
+      (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))
+    document.write(
+      '<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' +
+      (coverSupport ? ', viewport-fit=cover' : '') +
+      '" />',
+    )
+  </script> -->
+    <!-- v1.0.1 -->
+    <script
+      type="text/javascript"
+      charset="UTF-8"
+      src="https://wx.gtimg.com/pay_h5/goldplan/js/jgoldplan-1.0.0.js"
+    ></script>
+    <title>易联汽车账单</title>
+    <!--preload-links-->
+    <!--app-context-->
+  </head>
+
+  <body>
+    <div id="app"><!--app-html--></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

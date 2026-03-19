@@ -2335,8 +2335,18 @@ ul {
   --me-sticky-z-index: 99;
 }
 
+.me-sticky {
+  position: sticky;
+  z-index: var(--me-sticky-z-index);
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
 .me-sticky--fixed {
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: var(--me-sticky-z-index);
 }
 
@@ -11441,6 +11451,7 @@ body,
 }
 
 .detection-title .assess {
+  position: relative;
   display: flex;
   align-items: center;
   font-size: 26rpx;

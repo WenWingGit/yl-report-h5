@@ -270,7 +270,7 @@
       </view>
     </view>
 
-    <div class="module">
+    <div class="module" @click="showAllPic">
       <div class="title"><h2>检测照片</h2></div>
       <div>
         <div class="ImageViewApp">
@@ -310,7 +310,7 @@
     <div class="module">
       <div class="title">
         <h2>保障服务说明</h2>
-        <i class="me-badge__wrapper me-icon me-icon-arrow"></i>
+        <!-- <i class="me-badge__wrapper me-icon me-icon-arrow"></i> -->
       </div>
       <div>
         温馨提示：瓜子检测检测标准符合国家二手车鉴定标准,如对检测标准有异议,或您需要对检测报告进行解读,请拨打4000606047咨询
@@ -332,19 +332,20 @@
       innerScroll
       :title="currentWarningItem.name"
     >
-      <swiper
-        class="swiper"
-        circular
-        :indicator-dots="indicatorDots"
-        :autoplay="autoplay"
-        :interval="interval"
-        :duration="duration"
-      >
-        <swiper-item>
-          <view class="swiper-item uni-bg-red">A</view>
-        </swiper-item>
-      </swiper>
-      {{ currentWarningItem.list }}
+      <PicSwiper :list="list" :initIndex="currentListIndex" @change="handleCardChange" />
+      <!-- {{ currentWarningItem.list }} -->
+    </PagePopup>
+
+    <PagePopup
+      v-model:show="isShowAllPic"
+      alert
+      max-height="80vh"
+      inner-scroll
+      title="检测照片"
+    >
+      <view class="h-screen">
+        <AllPic />
+      </view>
     </PagePopup>
   </view>
 </template>
@@ -377,6 +378,8 @@ import {
 } from "@/data/index";
 import Empty from "@/components/common/Empty.vue";
 import { useClickStandard, useClickWarningItem } from "./useClickHook";
+import PicSwiper from "@/components/business/PicSwiper.vue";
+import AllPic from "@/components/business/AllPic.vue";
 
 let isClickScrolling = false; // 互斥锁：判断是否是点击触发的滚动
 const instance = getCurrentInstance();
@@ -629,6 +632,41 @@ const { currentStandard, isShowStandard, onClickStandard } = useClickStandard(al
 const { currentWarningItem, isShowWarningItem, onClickWarningItem } = useClickWarningItem(
   allData
 );
+
+const list = [
+  {
+    title: "右侧车顶边梁覆盖面：喷漆",
+    imageUrl: tab5,
+    statusClass: "",
+    statusText: "",
+  },
+  {
+    title: "右侧车顶边梁覆盖面：喷漆",
+    imageUrl: tab6,
+    statusClass: "",
+    statusText: "",
+  },
+  {
+    title: "右侧车顶边梁覆盖面：喷漆",
+    imageUrl: tab7,
+    statusClass: "",
+    statusText: "",
+  },
+  {
+    title: "右侧车顶边梁覆盖面：喷漆",
+    imageUrl: tab8,
+    statusClass: "",
+    statusText: "",
+  },
+];
+const currentListIndex = ref(0);
+
+const handleCardChange = () => {};
+
+const isShowAllPic = ref(false);
+const showAllPic = () => {
+  isShowAllPic.value = true;
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,3 @@
-import tab7 from '@/static/images/yilian/tab_7.png'
-import tab8 from '@/static/images/yilian/tab_8.png'
 export function useClickStandard(allData) {
   const currentStandard = reactive({
     name: '',
@@ -23,7 +21,7 @@ export function useClickWarningItem(allData) {
   const isShowWarningItem = ref(false)
   const onClickWarningItem = (typeIndex, resultIndex, resultItem) => {
     currentWarningItem.value.name = allData.value[typeIndex].resultList[resultIndex]?.name ?? ''
-    currentWarningItem.value.list = resultItem?.problemImgList || [tab7, tab8]
+    currentWarningItem.value.list = resultItem?.problemImgList || []
     isShowWarningItem.value = true
   }
 

@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AllPic: typeof import('./../components/business/AllPic.vue')['default']
     AppIcon: typeof import('./../components/common/AppIcon/AppIcon.vue')['default']
     BlockTitle: typeof import('./../components/common/BlockTitle.vue')['default']
     CheckTest: typeof import('./../components/common/CheckTest.vue')['default']
@@ -25,6 +26,7 @@ declare module '@vue/runtime-core' {
     PageWatchFileList: typeof import('./../components/common/PageWatchFileList.vue')['default']
     Pagination: typeof import('./../components/common/Pagination.vue')['default']
     Pic: typeof import('./../components/common/Pic.vue')['default']
+    PicSwiper: typeof import('./../components/business/PicSwiper.vue')['default']
     Tabbar: typeof import('./../components/Tabbar.vue')['default']
   }
 }

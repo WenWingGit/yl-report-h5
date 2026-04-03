@@ -1,0 +1,62 @@
+// 响应接口
+export interface WxMinApi-CarInspectionCriterion-GetDtoByCategory-GetRes {
+  /*执行成功 */
+  success: boolean;
+
+  /*状态码 */
+  code: number;
+
+  /*错误信息 */
+  message: string;
+
+  /* */
+  data: {
+    /*主键Id */
+    id: number;
+
+    /*创建者Id */
+    createdUserId: number;
+
+    /*创建时门店Id */
+    createdStoreId: number;
+
+    /*实际所属门店Id */
+    affiliatedStoreId: number;
+
+    /*实际所属人Id */
+    affiliatedUserId: number;
+
+    /*更新时间 */
+    updatedTime: Record<string, unknown>;
+
+    /*更新时间时间戳 */
+    updatedTimestamp: number;
+
+    /* */
+    category: {};
+
+    /*内容 */
+    content: string;
+
+    /* */
+    createdTime: Record<string, unknown>;
+  };
+
+  /*附加数据 */
+  extras: string;
+
+  /*时间戳 */
+  timestamp: number;
+
+  /*是否是自定返回值 */
+  __abp: boolean;
+}
+
+/** 
+ * 根据类别获取单个记录
+ * @param {string} category 检测类别<br />&nbsp; 未知 = 0<br />&nbsp;事故检测 事故检测 = 1<br />&nbsp;泡水检测 泡水检测 = 2<br />&nbsp;火烧检测 火烧检测 = 3<br />&nbsp;车身外观 车身外观 = 4<br />&nbsp;内饰配置 内饰配置 = 5<br />&nbsp;机舱工况 机舱工况 = 6<br />
+  * @returns
+ */
+export function WxMinApi-CarInspectionCriterion-GetDtoByCategory-Get(category: object): Promise<WxMinApi-CarInspectionCriterion-GetDtoByCategory-GetRes> {
+  return request.get(`/WxMinApi/CarInspectionCriterion/GetDtoByCategory?category=${category}`);
+}

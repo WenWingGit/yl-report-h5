@@ -365,17 +365,14 @@ import tab7 from "@/static/images/yilian/tab_7.png";
 import tab8 from "@/static/images/yilian/tab_8.png";
 
 import {
-  standard,
-  accident,
-  soakInWaterList,
-  fireList,
-  leftList,
-  carHead,
-  rightList,
-  carTailList,
-  decorationList,
-  cabinList,
-} from "@/data/index";
+  WxMinApiCarInspectionGetDtoByCarIdGet,
+  WxMinApiCarInspectionGetCarInspectionCategoryOptionCountStaGet,
+  WxMinApiCarInspectionGetCarInspectionOptionResultListGet,
+  WxMinApiCarInspectionGetCarInspectionPhotoListGet,
+  WxMinApiCarInspectionCriterionGetDtoByCategoryGet,
+  WxMinApiSettingSetCarInspectionTipGet,
+  WxMinApiSettingGuaranteeServiceDescriptionGet,
+} from "@/service/carInspection";
 import Empty from "@/components/common/Empty.vue";
 import { useClickStandard, useClickWarningItem } from "./useClickHook";
 import PicSwiper from "@/components/business/PicSwiper.vue";
@@ -575,7 +572,30 @@ const onClickSubTag = (typeIndex, resultIndex, subTagIndex) => {
   filterList(typeIndex, resultIndex);
 };
 
-onMounted(() => {
+onMounted(async () => {
+  // 调用接口获取数据
+  try {
+    // 获取车辆检测报告
+    const carInspectionReport = await WxMinApiCarInspectionGetDtoByCarIdGet(1);
+    console.log('车辆检测报告:', carInspectionReport);
+    
+    // 获取检测项数量统计
+    if (carInspectionReport.data?.id) {
+      const categoryCount = await WxMinApiCarInspectionGetCarInspectionCategoryOptionCountStaGet(carInspectionReport.data.id);
+      console.log('检测项数量统计:', categoryCount);
+    }
+    
+    // 获取车辆检测温馨提示
+    const inspectionTip = await WxMinApiSettingSetCarInspectionTipGet();
+    console.log('车辆检测温馨提示:', inspectionTip);
+    
+    // 获取车辆检测保障服务说明
+    const guaranteeService = await WxMinApiSettingGuaranteeServiceDescriptionGet();
+    console.log('车辆检测保障服务说明:', guaranteeService);
+  } catch (error) {
+    console.error('获取车辆检测数据失败:', error);
+  }
+  
   tabData.value.forEach((_, index) => {
     const observer = uni.createIntersectionObserver(instance.proxy);
 

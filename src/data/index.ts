@@ -41,7 +41,7 @@ export const accident = [
     tag: '右侧',
   },
   {
-    name: 'VIN码',
+    name: 'VIN 码',
     isNormal: true,
     tag: '前部',
   },
@@ -121,7 +121,7 @@ export const accident = [
     tag: '前部',
   },
   {
-    name: '行李箱后遮物板',
+    name: '行李箱后遮物板(金属)',
     isNormal: true,
     tag: '后部',
   },
@@ -171,7 +171,7 @@ export const accident = [
     tag: '右侧',
   },
   {
-    name: '左侧底边梁饰板',
+    name: '左侧底边梁饰板(塑料)',
     isNormal: true,
     tag: '左侧',
   },
@@ -181,9 +181,9 @@ export const accident = [
     tag: '左侧',
   },
   {
-    name: '右侧底边梁饰板',
+    name: '右侧底边梁饰板(塑料)',
     isNormal: true,
-    tag: '',
+    tag: '右侧',
   },
   {
     name: '右前纵梁梁头连接板',
@@ -221,7 +221,7 @@ export const accident = [
     tag: '右侧',
   },
   {
-    name: '右侧底边梁',
+    name: '右侧底边梁(金属)',
     isNormal: true,
     tag: '右侧',
   },
@@ -256,7 +256,7 @@ export const accident = [
     tag: '左侧',
   },
   {
-    name: '左侧底边梁',
+    name: '左侧底边梁(金属)',
     isNormal: true,
     tag: '左侧',
   },
@@ -355,7 +355,7 @@ export const soakInWaterList = [
     tag: '',
   },
   {
-    name: 'OBD接口',
+    name: 'OBD 接口',
     isNormal: true,
     tag: '',
   },
@@ -1124,7 +1124,7 @@ export const decorationList = [
   { name: '空调状态', isNormal: true, tag: '' },
   { name: '是否表显有误', isNormal: true, tag: '' },
   { name: '备胎', isNormal: true, tag: '' },
-  { name: 'OBD接口', isNormal: true, tag: '' },
+  { name: 'OBD 接口', isNormal: true, tag: '' },
   { name: '车身控制模块', isNormal: true, tag: '' },
   { name: '后备箱地板线束及插接器', isNormal: true, tag: '' },
   { name: '后排出风口', isNormal: true, tag: '' },
@@ -1141,9 +1141,9 @@ export const decorationList = [
   { name: '遥控钥匙', isNormal: true, tag: '' },
   { name: '车内后排', isNormal: true, tag: '' },
   { name: '车内前排', isNormal: true, tag: '' },
-  { name: '中控锁(含门锁)', isNormal: true, tag: '' },
+  { name: '中控锁 (含门锁)', isNormal: true, tag: '' },
   { name: '无钥匙启动', isNormal: true, tag: '' },
-  { name: 'OBD检测', isNormal: true, tag: '' },
+  { name: 'OBD 检测', isNormal: true, tag: '' },
   { name: '工况检测', isNormal: true, tag: '' },
   { name: '防盗螺栓钥匙', isNormal: true, tag: '' },
   { name: '灯光控制', isNormal: true, tag: '' },

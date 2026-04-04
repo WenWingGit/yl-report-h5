@@ -19,9 +19,7 @@
 
           <view class="card-footer">
             <text class="label">解读：</text>
-            <text class="status-tag" :class="item.statusClass">{{
-              item.statusText
-            }}</text>
+            <text>{{ item.statusText }}</text>
           </view>
         </view>
       </swiper-item>

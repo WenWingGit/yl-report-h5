@@ -400,7 +400,7 @@ export interface WxMinApiCarInspectionCriterionGetDtoByCategoryGetRes {
  * @param {string} category 检测类别<br />&nbsp; 未知 = 0<br />&nbsp;事故检测 事故检测 = 1<br />&nbsp;泡水检测 泡水检测 = 2<br />&nbsp;火烧检测 火烧检测 = 3<br />&nbsp;车身外观 车身外观 = 4<br />&nbsp;内饰配置 内饰配置 = 5<br />&nbsp;机舱工况 机舱工况 = 6<br />
   * @returns
  */
-export function WxMinApiCarInspectionCriterionGetDtoByCategoryGet(category: object): Promise<WxMinApiCarInspectionCriterionGetDtoByCategoryGetRes> {
+export function WxMinApiCarInspectionCriterionGetDtoByCategoryGet(category: number): Promise<WxMinApiCarInspectionCriterionGetDtoByCategoryGetRes> {
   return http.get(`/WxMinApi/CarInspectionCriterion/GetDtoByCategory?category=${category}`);
 }
 
@@ -470,4 +470,177 @@ export interface WxMinApiSettingGuaranteeServiceDescriptionGetRes {
  */
 export function WxMinApiSettingGuaranteeServiceDescriptionGet(): Promise<WxMinApiSettingGuaranteeServiceDescriptionGetRes> {
   return http.get(`/WxMinApi/Setting/GuaranteeServiceDescription`);
+}
+
+// Category
+// 检测类别
+// 未知 = 0
+// 事故检测 事故检测 = 1
+// 泡水检测 泡水检测 = 2
+// 火烧检测 火烧检测 = 3
+// 车身外观 车身外观 = 4
+// 内饰配置 内饰配置 = 5
+// 机舱工况 机舱工况 = 6
+
+// location
+// 检测位置
+//   无 = 0
+//  前部 前部 = 1
+//  右侧 右侧 = 2
+//  后部 后部 = 3
+//  左侧 左侧 = 4
+//  驾驶侧 驾驶侧 = 5
+//  车头 车头 = 6
+//  副驾驶侧 副驾驶侧 = 7
+//  车尾 车尾 = 8
+
+interface GetCarInspectionCountStaListRes {
+  category: number;
+  location: number;
+  countList: CountList[];
+}
+
+interface CountList {
+  result: number;
+  resultName: string;
+  resultIcon: string;
+  resultLevel: number;
+  count: number;
+}
+
+/** 
+ * 按类别统计数量
+ * @returns
+ */
+export function GetCarInspectionCountStaList(carInspectionId): Promise<GetCarInspectionCountStaListRes> {
+  return http.get(`/WxMinApi/CarInspection/GetCarInspectionCountStaList?carInspectionId=${carInspectionId}`, );
+}
+
+
+
+
+
+
+
+
+// 响应接口
+export interface WxMinApiCarInspectionGetCarInspectionProblemListGetRes {
+  /*执行成功 */
+  success: boolean;
+
+  /*状态码 */
+  code: number;
+
+  /*错误信息 */
+  message: string;
+
+  /* */
+  data: {
+    /*页码 */
+    pageIndex: number;
+
+    /*每页显示多少条数据 */
+    pageSize: number;
+
+    /*总页数 */
+    totalPage: number;
+
+    /*记录总行数 */
+    totalRows: number;
+
+    /* */
+    rows: {
+      /*主键Id */
+      id: number;
+
+      /*创建者Id */
+      createdUserId: number;
+
+      /*创建时门店Id */
+      createdStoreId: number;
+
+      /*实际所属门店Id */
+      affiliatedStoreId: number;
+
+      /*实际所属人Id */
+      affiliatedUserId: number;
+
+      /*车辆Id */
+      carId: number;
+
+      /*检测报告Id */
+      carInspectionId: number;
+
+      /*检测项Id */
+      carInspectionOptionId: number;
+
+      /*描述 */
+      description: string;
+
+      /*图片 */
+      imgStr: string;
+
+      /*解读 */
+      interpretation: string;
+
+      /*检测结果 */
+      result: number;
+
+      /*检测结果文本 */
+      resultText: string;
+
+      /* */
+      createdTime: Record<string, unknown>;
+
+      /* */
+      createdTimeStr: string;
+
+      /*是否可编辑 */
+      canEdit: boolean;
+
+      /*是否可删除 */
+      canDelete: boolean;
+    }[];
+
+    /*是否有下一页 */
+    hasNextPage: boolean;
+
+    /*是否有上一页 */
+    hasPreviousPage: boolean;
+
+    /*用于一些额外的数据 */
+    dict: Record<string, unknown>;
+  };
+
+  /*附加数据 */
+  extras: string;
+
+  /*时间戳 */
+  timestamp: number;
+
+  /*是否是自定返回值 */
+  __abp: boolean;
+}
+
+/** 
+ * 问题项(分页)
+ * @param {string} CarInspectionId 检测报告Id，必填
+  * @param {string} CarInspectionOptionId 检测项Id，必填
+  * @param {string} Description 
+  * @param {string} Interpretation 
+  * @param {string} Result 
+  * @param {string} SearchValue 搜索值
+  * @param {string} PageIndex 当前页码
+  * @param {string} PageSize 页码容量
+  * @param {string} SearchBeginTime 搜索开始时间
+  * @param {string} SearchEndTime 搜索结束时间
+  * @param {string} SortField 排序字段
+  * @param {string} SortOrder 排序方法,默认升序,否则降序(配合antd前端,约定参数为 Ascend,Dscend)
+  * @param {string} DescStr 降序排序(不要问我为什么是descend不是desc，前端约定参数就是这样)
+  * @param {string} SearchParameters 查询条件
+  * @param {string} IsOnlyDel 是否仅显示删除
+  * @returns
+ */
+export function GetCarInspectionProblemListGet(CarInspectionId: number, CarInspectionOptionId: number, ): Promise<WxMinApiCarInspectionGetCarInspectionProblemListGetRes> {
+  return http.get(`/WxMinApi/CarInspection/GetCarInspectionProblemList?CarInspectionId=${CarInspectionId}&CarInspectionOptionId=${CarInspectionOptionId}&PageIndex=${1}&PageSize=${99}`);
 }

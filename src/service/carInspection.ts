@@ -336,7 +336,7 @@ export interface WxMinApiCarInspectionGetCarInspectionPhotoListGetRes {
   * @param {string} PhotoType <br />&nbsp; 未知 = 0<br />&nbsp; 基础照片 = 1<br />&nbsp; 留底照片 = 2<br />&nbsp; 异常照片 = 3<br />
   * @returns
  */
-export function WxMinApiCarInspectionGetCarInspectionPhotoListGet(CarInspectionId: number, PhotoType: object): Promise<WxMinApiCarInspectionGetCarInspectionPhotoListGetRes> {
+export function WxMinApiCarInspectionGetCarInspectionPhotoListGet(CarInspectionId: number, PhotoType: number): Promise<WxMinApiCarInspectionGetCarInspectionPhotoListGetRes> {
   return http.get(`/WxMinApi/CarInspection/GetCarInspectionPhotoList?CarInspectionId=${CarInspectionId}&PhotoType=${PhotoType}`);
 }
 

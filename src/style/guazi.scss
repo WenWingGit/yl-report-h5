@@ -11464,6 +11464,7 @@ body,
   margin-bottom: 40rpx;
 }
 
+.item-desc .img,
 .item-desc img {
   width: 643rpx;
   height: 320rpx;
@@ -13124,7 +13125,8 @@ body,
   font-size: 24rpx;
   color: rgb(48, 55, 65);
   letter-spacing: 0px;
-  line-height: 36rpx;
+  // line-height: 36rpx;
+  line-height: 1;
 }
 
 .result-list .result-info .result-item .item-row .row-left .arrow-icon {

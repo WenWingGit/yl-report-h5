@@ -14,7 +14,7 @@
     </view>
 
     <view class="grid-content">
-      <view class="grid-item" v-for="(item, index) in currentPhotoList" :key="index">
+      <view class="grid-item" v-for="(item, index) in photoList" :key="index">
         <image
           class="photo"
           :src="item.url"
@@ -24,70 +24,97 @@
         <text class="photo-label">{{ item.label }}</text>
       </view>
 
-      <view class="empty-tip" v-if="currentPhotoList.length === 0"> 暂无照片数据 </view>
+      <view class="empty-tip" v-if="photoList.length === 0"> 暂无照片数据 </view>
     </view>
   </view>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      currentTab: 0, // 当前选中的 Tab 索引
-      tabs: [
-        { name: "基础照片", key: "basic" },
-        { name: "留底照片", key: "archive" },
-        { name: "异常照片", key: "abnormal" },
-      ],
-      // 模拟所有照片数据，你可以根据接口返回格式调整
-      allPhotos: {
-        basic: [
-          { label: "左前45°", url: "https://via.placeholder.com/200x150.png?text=1" },
-          { label: "右后45°", url: "https://via.placeholder.com/200x150.png?text=2" },
-          { label: "着车仪表盘", url: "https://via.placeholder.com/200x150.png?text=3" },
-          { label: "中控台", url: "https://via.placeholder.com/200x150.png?text=4" },
-          { label: "驾驶位", url: "https://via.placeholder.com/200x150.png?text=5" },
-          {
-            label: "左侧后排座椅",
-            url: "https://via.placeholder.com/200x150.png?text=6",
-          },
-          { label: "正前", url: "https://via.placeholder.com/200x150.png?text=7" },
-          { label: "发动机舱", url: "https://via.placeholder.com/200x150.png?text=8" },
-        ],
-        archive: [
-          { label: "铭牌", url: "https://via.placeholder.com/200x150.png?text=Archive" },
-        ],
-        abnormal: [],
-      },
-    };
-  },
-  computed: {
-    // 根据当前选中的 tab 动态计算应该显示的图片列表
-    currentPhotoList() {
-      const currentTabKey = this.tabs[this.currentTab].key;
-      return this.allPhotos[currentTabKey] || [];
-    },
-  },
-  methods: {
-    // 切换 Tab
-    switchTab(index) {
-      this.currentTab = index;
-    },
-    // 关闭操作（通知父组件）
-    close() {
-      this.$emit("close");
-    },
-    // 预览图片
-    previewImage(index) {
-      // 提取当前列表所有的图片 URL 组成数组
-      const urls = this.currentPhotoList.map((item) => item.url);
-      uni.previewImage({
-        current: index, // 当前显示图片的索引
-        urls: urls, // 需要预览的图片链接列表
-      });
-    },
-  },
-};
+<script setup lang="ts">
+import { WxMinApiCarInspectionGetCarInspectionPhotoListGet } from "@/service/carInspection";
+import { fullUrl } from "@/utils/utils";
+import { ref, computed } from "vue";
+
+// Tab 数据类型
+interface TabType {
+  name: string;
+  key: string;
+}
+
+// 照片项类型
+interface PhotoItem {
+  label: string;
+  url: string;
+}
+
+interface IProps {
+  carInspectionId: string;
+}
+const props = withDefaults(defineProps<IProps>(), {
+  carInspectionId: "",
+});
+
+// tabs定义
+const tabs = ref<TabType[]>([
+  { name: "基础照片", key: "0" },
+  { name: "留底照片", key: "1" },
+  { name: "异常照片", key: "2" },
+]);
+
+const currentTab = ref<number>(0);
+
+onMounted(() => {
+  loadPhotoList();
+});
+
+watch(
+  () => props.carInspectionId,
+  (va) => {
+    if (va) {
+      loadPhotoList();
+    }
+  }
+);
+
+const photoList = ref([]);
+
+async function loadPhotoList() {
+  if (!props.carInspectionId) {
+    return 0;
+  }
+  const res = await WxMinApiCarInspectionGetCarInspectionPhotoListGet(
+    props.carInspectionId,
+    currentTab.value
+  );
+  if (res?.data) {
+    photoList.value = res?.data?.map((item) => {
+      return {
+        label: item.description,
+        url: fullUrl(item?.imgStr),
+      };
+    });
+  }
+}
+
+// 切换 tab
+function switchTab(index: number) {
+  currentTab.value = index;
+  loadPhotoList();
+}
+
+// 关闭回调（如需与父通信可emit，当前未用到）
+function close() {
+  // 暂未传递 emits, 可补： defineEmits(['close'])
+  // emit('close')
+}
+
+// 预览图片
+function previewImage(index: number) {
+  const urls = currentPhotoList.value.map((item) => item.url);
+  uni.previewImage({
+    current: index,
+    urls: urls,
+  });
+}
 </script>
 
 <style lang="scss" scoped>

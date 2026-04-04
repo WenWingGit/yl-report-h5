@@ -36,6 +36,14 @@
       "style": {
         "navigationBarTitleText": "检测报告"
       }
+    },
+    {
+      "path": "pages/index/afterSales",
+      "type": "page",
+      "layout": "default",
+      "style": {
+        "navigationBarTitleText": "售后理赔"
+      }
     }
   ],
   "subPackages": []

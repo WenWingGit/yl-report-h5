@@ -9,7 +9,7 @@
 
 <template>
   <view class="page-report">
-    <div class="report-brief">
+    <div v-if="reportInfo" class="report-brief">
       <div class="report-header__content">
         <div class="check-content">
           <div class="report-info">
@@ -20,21 +20,23 @@
                 mode="widthFix"
               ></image>
             </div>
-            <p class="report-no">报告编号: SGJC20260228-163391109</p>
+            <p class="report-no">报告编号: {{ reportInfo?.number }}</p>
           </div>
           <div class="car-card">
             <div class="me-image car-photo" style="overflow: hidden; border-radius: 4px">
               <image
                 class="me-image__img"
-                src="/static/images/yilian/qnbdp7206xf850062988b941f99f5ce028d840e0f51772242791.jpg"
+                :src="reportInfo.carMainImg"
                 mode="widthFix"
-              >
-              </image>
+              ></image>
             </div>
             <div class="car-info">
-              <p class="title">本田 思域 2019款 220TURBO CVT劲动版 国VI</p>
-              <p class="car-info__desc">VIN: LVH**********8856</p>
-              <p class="car-info__desc">2020-6-3 | 6.5万公里（表显里程）</p>
+              <p class="title">{{ reportInfo.brandThirdText }}</p>
+              <p class="car-info__desc">VIN: {{ reportInfo.carVin }}</p>
+              <p class="car-info__desc">
+                {{ reportInfo.carPurchaseTime }} |
+                {{ reportInfo.carMileage }}万公里（表显里程）
+              </p>
             </div>
           </div>
           <div class="detection-overview-card detection-overview-card-insured">
@@ -43,7 +45,7 @@
               src="/static/images/yilian/carInsure-7d1aa9f1.png"
               mode="widthFix"
             ></image>
-            <div class="card-content">
+            <div v-if="reportInfoCount" class="card-content">
               <div class="conclusion">
                 <div class="item">
                   <image
@@ -53,8 +55,8 @@
                     mode="widthFix"
                   >
                   </image>
-                  <p class="total">共63项</p>
-                  <p class="desc">非重大事故</p>
+                  <p class="total">共{{ reportInfoCount[0].count }}项</p>
+                  <p class="desc">{{ reportInfoCount[0].resultName }}</p>
                 </div>
                 <div class="item">
                   <image
@@ -64,8 +66,8 @@
                     mode="widthFix"
                   >
                   </image>
-                  <p class="total">共39项</p>
-                  <p class="desc">非泡水</p>
+                  <p class="total">共{{ reportInfoCount[1].count }}项</p>
+                  <p class="desc">{{ reportInfoCount[1].resultName }}</p>
                 </div>
                 <div class="item">
                   <image
@@ -75,17 +77,21 @@
                     mode="widthFix"
                   >
                   </image>
-                  <p class="total">共13项</p>
-                  <p class="desc">非火烧</p>
+                  <p class="total">共{{ reportInfoCount[2].count }}项</p>
+                  <p class="desc">{{ reportInfoCount[2].resultName }}</p>
                 </div>
               </div>
             </div>
             <ul>
               <li>
-                <span>检测师<i>蔡成生</i></span>
+                <span
+                  >检测师<i>{{ reportInfo.inspector }}</i></span
+                >
               </li>
               <li>
-                <span>检测日期<i>2026-02-28</i></span>
+                <span
+                  >检测日期<i>{{ reportInfo.updatedTime }}</i></span
+                >
               </li>
             </ul>
           </div>
@@ -135,11 +141,7 @@
             :id="'me-tab-' + typeIndex"
             class="me-tab__panel"
           >
-            <div
-              v-for="(result, resultIndex) in type.resultList"
-              class="detection-item"
-              :key="resultIndex"
-            >
+            <div class="detection-item">
               <div class="detection-title">
                 <image
                   class="detection-title-img"
@@ -147,19 +149,22 @@
                   mode="widthFix"
                 ></image>
                 <div class="detection-title-left">
-                  <h2>{{ result.name }}</h2>
-                  <span class="me-tag me-tag--primary detection-title-tag">
-                    非重大事故
-                  </span>
+                  <h2>{{ type.name }}</h2>
+                  <span class="me-tag detection-title-tag">非重大事故</span>
                 </div>
                 <span class="assess" @click="onClickStandard(resultIndex)">
                   <span>判定标准</span>
                   <i class="me-badge__wrapper me-icon me-icon-arrow"></i>
                 </span>
               </div>
-              <div class="detection-content">
+              <div
+                v-for="(result, resultIndex) in type.resultList"
+                :key="resultIndex"
+                class="detection-content"
+              >
                 <div class="item-desc">
                   <div class="normal-num">
+                    <h2 v-if="type.resultList?.length > 1">{{ result.name }}</h2>
                     <div class="normal-num-title">只看问题项</div>
                     <div
                       role="switch"
@@ -173,7 +178,12 @@
                       <div class="me-switch__node"></div>
                     </div>
                   </div>
-                  <image :src="result.img" mode="widthFix"></image>
+                  <image
+                    :id="result.imgIdName"
+                    class="img"
+                    :src="result.img"
+                    mode="widthFix"
+                  ></image>
                 </div>
                 <div class="defect-item">
                   <div class="item-sidler">
@@ -192,6 +202,7 @@
                     <div class="defect-total">0</div>
                   </div>
                 </div>
+
                 <div
                   v-if="result?.subTabList?.length"
                   class="cars-render-tab-container cars-render-tab-scrollable"
@@ -212,6 +223,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="cars-render-tab-content">
                   <div class="result-list">
                     <template v-if="result?.justProblem || result.curSubTabIndex !== 0">
@@ -228,7 +240,7 @@
                             <div class="row-left">
                               <image
                                 class="arrow-icon"
-                                :src="normal"
+                                :src="subResultItem.icon"
                                 mode="widthFix"
                               ></image>
                               <div class="name">{{ subResultItem.name }}</div>
@@ -252,7 +264,7 @@
                           <div class="row-left">
                             <image
                               class="arrow-icon"
-                              :src="normal"
+                              :src="subResultItem.icon"
                               mode="widthFix"
                             ></image>
                             <div class="name">{{ subResultItem.name }}</div>
@@ -275,31 +287,9 @@
       <div>
         <div class="ImageViewApp">
           <div class="middle">
-            <div class="middleImg">
+            <div v-for="item in allPhotos" :key="item.url" class="middleImg lastDiv">
               <div class="me-image" style="width: 100%; height: 100%">
-                <img
-                  src="https://image-public.guazistatic.com/qnbdp7206xf850062988b941f99f5ce028d840e0f51772242791.jpg?x-bce-process=image/resize,p_50"
-                  class="me-image__img"
-                  style="object-fit: cover"
-                />
-              </div>
-            </div>
-            <div class="middleImg">
-              <div class="me-image" style="width: 100%; height: 100%">
-                <img
-                  src="https://image-public.guazistatic.com/qnbdp7206x51b61019c17442df93064bc0a9f3b6ce1772242793.jpg?x-bce-process=image/resize,p_50"
-                  class="me-image__img"
-                  style="object-fit: cover"
-                />
-              </div>
-            </div>
-            <div class="middleImg lastDiv">
-              <div class="me-image" style="width: 100%; height: 100%">
-                <img
-                  src="https://image-public.guazistatic.com/qnbdp7964x57dce77db3c7400fb7bcda0ad0c4b9991772242686.jpg?x-bce-process=image/resize,p_50"
-                  class="me-image__img"
-                  style="object-fit: cover"
-                />
+                <image :src="item.url" class="me-image__img" style="object-fit: cover" />
               </div>
             </div>
           </div>
@@ -310,10 +300,10 @@
     <div class="module">
       <div class="title">
         <h2>保障服务说明</h2>
-        <!-- <i class="me-badge__wrapper me-icon me-icon-arrow"></i> -->
+        <i class="me-badge__wrapper me-icon me-icon-arrow" @click="goAfterSales"></i>
       </div>
       <div>
-        温馨提示：瓜子检测检测标准符合国家二手车鉴定标准,如对检测标准有异议,或您需要对检测报告进行解读,请拨打4000606047咨询
+        {{ tips }}
       </div>
     </div>
 
@@ -343,8 +333,8 @@
       inner-scroll
       title="检测照片"
     >
-      <view class="h-screen">
-        <AllPic />
+      <view class="h-80vh">
+        <AllPic :car-inspection-id="carInspectionId" />
       </view>
     </PagePopup>
   </view>
@@ -377,11 +367,38 @@ import Empty from "@/components/common/Empty.vue";
 import { useClickStandard, useClickWarningItem } from "./useClickHook";
 import PicSwiper from "@/components/business/PicSwiper.vue";
 import AllPic from "@/components/business/AllPic.vue";
+import { useMessage } from "wot-design-uni";
+import { fullUrl } from "@/utils/utils";
+import { handleReport } from "./help";
+import {
+  accident,
+  soakInWaterList,
+  fireList,
+  leftList,
+  carHead,
+  rightList,
+  carTailList,
+  decorationList,
+  cabinList,
+} from "@/data/index";
+import { isNumber } from "wot-design-uni/components/common/util";
 
 let isClickScrolling = false; // 互斥锁：判断是否是点击触发的滚动
 const instance = getCurrentInstance();
 
 const sectionTops = ref([]); // 存放所有模块的绝对 top 坐标
+
+const tagNameList = {
+  accident,
+  soakInWaterList,
+  fireList,
+  leftList,
+  carHead,
+  rightList,
+  carTailList,
+  decorationList,
+  cabinList,
+};
 
 const tabIndex = ref(0);
 
@@ -395,13 +412,15 @@ const allData = ref([
         name: "事故检测",
         curSubTabIndex: 0,
         subTabList: ["全部", "前部", "右侧", "后部", "左侧"],
-        list: accident.value,
+        list: [],
         img: tab0,
         justProblem: false,
         filterList: [],
+        tagName: "accident",
+        imgIdName: "",
       },
     ],
-    standard: standard.accident,
+    standard: [],
   },
   {
     name: "泡水检测",
@@ -412,13 +431,15 @@ const allData = ref([
         name: "泡水检测",
         curSubTabIndex: 0,
         subTabList: [],
-        list: soakInWaterList.value,
+        list: [],
         img: tab1,
         justProblem: false,
         filterList: [],
+        tagName: "soakInWaterList",
+        imgIdName: "",
       },
     ],
-    standard: standard.soakInWater,
+    standard: [],
   },
   {
     name: "火烧检测",
@@ -429,13 +450,15 @@ const allData = ref([
         name: "火烧检测",
         curSubTabIndex: 0,
         subTabList: [],
-        list: fireList.value,
+        list: [],
         img: tab2,
         justProblem: false,
         filterList: [],
+        tagName: "fireList",
+        imgIdName: "",
       },
     ],
-    standard: standard.fire,
+    standard: [],
   },
   {
     name: "车身外观",
@@ -444,42 +467,50 @@ const allData = ref([
     resultList: [
       {
         name: "驾驶侧",
-        list: leftList.value,
+        list: [],
         curSubTabIndex: 0,
         subTabList: [],
         img: tab3,
         justProblem: false,
         filterList: [],
+        tagName: "leftList",
+        imgIdName: "driving-seat",
       },
       {
         name: "车头",
-        list: carHead.value,
+        list: [],
         img: tab4,
         curSubTabIndex: 0,
         subTabList: [],
         justProblem: false,
         filterList: [],
+        tagName: "carHead",
+        imgIdName: "svg-head",
       },
       {
         name: "副驾驶侧",
-        list: rightList.value,
+        list: [],
         img: tab5,
         curSubTabIndex: 0,
         subTabList: [],
         justProblem: false,
         filterList: [],
+        tagName: "rightList",
+        imgIdName: "front-passenger-seat",
       },
       {
         name: "车尾",
-        list: carTailList.value,
+        list: [],
         img: tab6,
         curSubTabIndex: 0,
         subTabList: [],
         justProblem: false,
         filterList: [],
+        tagName: "carTailList",
+        imgIdName: "svg-trail",
       },
     ],
-    standard: standard.body,
+    standard: [],
   },
   {
     name: "内饰配置",
@@ -488,15 +519,17 @@ const allData = ref([
     resultList: [
       {
         name: "内饰配置",
-        list: decorationList.value,
+        list: [],
         img: tab7,
         curSubTabIndex: 0,
         subTabList: [],
         justProblem: false,
         filterList: [],
+        tagName: "decorationList",
+        imgIdName: "",
       },
     ],
-    standard: standard.inside,
+    standard: [],
   },
   {
     name: "机舱工况",
@@ -505,15 +538,17 @@ const allData = ref([
     resultList: [
       {
         name: "机舱工况",
-        list: cabinList.value,
+        list: [],
         img: tab8,
         curSubTabIndex: 0,
         justProblem: false,
         subTabList: [],
         filterList: [],
+        tagName: "cabinList",
+        imgIdName: "",
       },
     ],
-    standard: standard.cabin,
+    standard: [],
   },
 ]);
 
@@ -525,6 +560,114 @@ const tabData = computed(() => {
     };
   });
 });
+
+const carId = ref(0);
+const carInspectionId = ref(0);
+const message = useMessage();
+
+const reportInfo = ref();
+const reportInfoCount = ref();
+const allPhotos = ref([]);
+const tips = ref("");
+
+onLoad(async (options) => {
+  if (!options.carId) {
+    message.alert("无法查看该车辆");
+    return "";
+  }
+  carId.value = options.carId;
+  // 调用接口获取数据
+  try {
+    // 获取车辆检测报告
+    const carInspectionReport = await WxMinApiCarInspectionGetDtoByCarIdGet(carId.value);
+
+    loadTipText();
+
+    await loadCarReport();
+    await loadPhotoList();
+    await loadAllReportList();
+    await loadReportCount();
+
+    await onReadyDom();
+  } catch (error) {
+    console.error("获取车辆检测数据失败:", error);
+  }
+});
+
+async function loadReportCount() {
+  const res = await WxMinApiCarInspectionGetCarInspectionCategoryOptionCountStaGet(
+    carInspectionId.value
+  );
+  if (res?.data) {
+    const list = res?.data || [];
+
+    reportInfoCount.value = list.filter((item) => {
+      return [1, 2, 3].includes(item.category);
+    });
+  }
+}
+
+async function loadAllReportList() {
+  const promiseMap = [1, 2, 3, 4, 5, 6].map((item) => {
+    return WxMinApiCarInspectionGetCarInspectionOptionResultListGet(
+      carInspectionId.value,
+      0,
+      item
+    );
+  });
+
+  Promise.all(promiseMap).then((res) => {
+    res?.map((item, index) => {
+      if (item?.success && item?.data) {
+        allData.value[index].resultList.forEach((resultItem) => {
+          const mockList = tagNameList[resultItem.tagName];
+          const list = item?.data.map((_dataItem) => {
+            const mockItem = mockList.find((mockItem) => {
+              return _dataItem.name === mockItem.name;
+            });
+            return {
+              name: _dataItem.name,
+              tag: mockItem?.tag || "",
+              isNormal: _dataItem?.overallResultName === "通过",
+              icon: fullUrl(_dataItem.historyRepairIcon || _dataItem.overallResultIcon),
+            };
+          });
+          resultItem.list = list;
+        });
+      }
+    });
+  });
+}
+
+async function loadCarReport() {
+  const res = await WxMinApiCarInspectionGetDtoByCarIdGet(carId.value);
+  if (res.data?.id) {
+    carInspectionId.value = res.data?.id;
+    reportInfo.value = handleReport(res?.data);
+    console.log(reportInfo.value);
+  }
+}
+
+async function loadPhotoList() {
+  const res = await WxMinApiCarInspectionGetCarInspectionPhotoListGet(
+    carInspectionId.value,
+    0
+  );
+  if (res?.data) {
+    allPhotos.value = res?.data.slice(0, 3).map((item) => {
+      return {
+        label: item.description,
+        url: fullUrl(item?.imgStr),
+      };
+    });
+  }
+}
+
+async function loadTipText() {
+  // 获取车辆检测温馨提示
+  const tipsRes = await WxMinApiSettingSetCarInspectionTipGet();
+  tips.value = tipsRes?.data;
+}
 
 const onClickItem = (item, index) => {
   tabIndex.value = index;
@@ -573,29 +716,6 @@ const onClickSubTag = (typeIndex, resultIndex, subTagIndex) => {
 };
 
 onMounted(async () => {
-  // 调用接口获取数据
-  try {
-    // 获取车辆检测报告
-    const carInspectionReport = await WxMinApiCarInspectionGetDtoByCarIdGet(1);
-    console.log('车辆检测报告:', carInspectionReport);
-    
-    // 获取检测项数量统计
-    if (carInspectionReport.data?.id) {
-      const categoryCount = await WxMinApiCarInspectionGetCarInspectionCategoryOptionCountStaGet(carInspectionReport.data.id);
-      console.log('检测项数量统计:', categoryCount);
-    }
-    
-    // 获取车辆检测温馨提示
-    const inspectionTip = await WxMinApiSettingSetCarInspectionTipGet();
-    console.log('车辆检测温馨提示:', inspectionTip);
-    
-    // 获取车辆检测保障服务说明
-    const guaranteeService = await WxMinApiSettingGuaranteeServiceDescriptionGet();
-    console.log('车辆检测保障服务说明:', guaranteeService);
-  } catch (error) {
-    console.error('获取车辆检测数据失败:', error);
-  }
-  
   tabData.value.forEach((_, index) => {
     const observer = uni.createIntersectionObserver(instance.proxy);
 
@@ -615,7 +735,7 @@ const elementInitTop = ref(0); // 元素距离顶部的初始距离
 const elementInitHeight = ref(0); // 元素的高度
 const h5NavHeight = ref(0); // H5 端默认导航栏的高度
 
-onReady(() => {
+function onReadyDom() {
   // 1. 获取 H5 环境下的系统导航栏高度
   // 如果你在 pages.json 中设置了 "navigationStyle": "custom"，这个值会是 0
   const sysInfo = uni.getSystemInfoSync();
@@ -634,7 +754,7 @@ onReady(() => {
       }
     })
     .exec();
-});
+}
 
 // 3. 监听页面滚动事件
 onPageScroll((e) => {
@@ -686,6 +806,12 @@ const handleCardChange = () => {};
 const isShowAllPic = ref(false);
 const showAllPic = () => {
   isShowAllPic.value = true;
+};
+
+const goAfterSales = () => {
+  uni.navigateTo({
+    url: "/pages/index/afterSales",
+  });
 };
 </script>
 

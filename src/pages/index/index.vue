@@ -674,7 +674,7 @@ onLoad(async (options) => {
     await loadAllReportCount();
     await loadReportCount();
 
-    setTimeout(async () => {
+    await setTimeout(async () => {
       await onReadyDom();
     }, 1200);
   } catch (error) {

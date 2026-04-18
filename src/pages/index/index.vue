@@ -16,7 +16,7 @@
             <div class="logo">
               <image
                 class="logo-img"
-                src="/static/images/yilian/logo.png"
+                src="/static/images/yilian/logo1.svg"
                 mode="widthFix"
               ></image>
             </div>
@@ -136,11 +136,13 @@
         </div>
 
         <div class="me-tabs__content">
-          <div
-            v-for="(type, typeIndex) in allData"
-            :id="'me-tab-' + typeIndex"
-            class="me-tab__panel"
-          >
+          <div v-for="(type, typeIndex) in allData" class="me-tab__panel">
+            <div
+              class="me-tab-location"
+              :id="'me-tab-' + typeIndex"
+              :style="{ marginTop: '-' + elementInitHeight + 'px' }"
+            ></div>
+            <div :style="{ paddingBottom: elementInitHeight + 'px' }"></div>
             <div class="detection-item">
               <div class="detection-title">
                 <image
@@ -355,6 +357,20 @@
       </div>
       <div>
         {{ tips }}
+      </div>
+    </div>
+
+    <!--  -->
+    <div class="fixed-layer home-live-box" @click="toTop">
+      <div class="live-border1"></div>
+      <div class="live-wrap fold">
+        <!---->
+        <div class="live__avatar">
+          <img class="return" src="/static/images/yilian/totop.png" />
+        </div>
+        <!-- <div class="live__text" style="">
+          <p class="subtitle">返回顶部</p>
+        </div> -->
       </div>
     </div>
 
@@ -658,7 +674,9 @@ onLoad(async (options) => {
     await loadAllReportCount();
     await loadReportCount();
 
-    await onReadyDom();
+    setTimeout(async () => {
+      await onReadyDom();
+    }, 1200);
   } catch (error) {
     console.error("获取车辆检测数据失败:", error);
   }
@@ -888,6 +906,13 @@ onPageScroll((e) => {
   }
 });
 
+const toTop = () => {
+  uni.pageScrollTo({
+    scrollTop: 0,
+    duration: 300,
+  });
+};
+
 const { currentStandard, isShowStandard, onClickStandard } = useClickStandard(allData);
 
 const {
@@ -941,5 +966,12 @@ const goAfterSales = () => {
   min-width: 100%;
   width: fit-content;
   white-space: nowrap;
+}
+.me-tab-location {
+  position: relative;
+}
+
+.fixed-layer {
+  z-index: 999;
 }
 </style>

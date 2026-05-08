@@ -656,11 +656,11 @@ const allPhotos = ref([]);
 const tips = ref("");
 
 onLoad(async (options) => {
-  if (!options.carId) {
+  if (!options.carid) {
     message.alert("无法查看该车辆");
     return "";
   }
-  carId.value = options.carId;
+  carId.value = options.carid;
   // 调用接口获取数据
   try {
     // 获取车辆检测报告

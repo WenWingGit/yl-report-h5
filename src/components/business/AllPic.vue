@@ -55,9 +55,9 @@ const props = withDefaults(defineProps<IProps>(), {
 
 // tabs定义
 const tabs = ref<TabType[]>([
-  { name: "基础照片", key: "0" },
-  { name: "留底照片", key: "1" },
-  { name: "异常照片", key: "2" },
+  { name: "基础照片", key: "1" },
+  { name: "留底照片", key: "2" },
+  { name: "异常照片", key: "3" },
 ]);
 
 const currentTab = ref<number>(0);
@@ -83,7 +83,7 @@ async function loadPhotoList() {
   }
   const res = await WxMinApiCarInspectionGetCarInspectionPhotoListGet(
     props.carInspectionId,
-    currentTab.value
+    tabs.value[currentTab.value].key
   );
   if (res?.data) {
     photoList.value = res?.data?.map((item) => {
